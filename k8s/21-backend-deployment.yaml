@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: pedrobrantis/backend:latest
+          image: thalestjo/ecommerce-backend:dev
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
