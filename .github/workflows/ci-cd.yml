@@ -2,9 +2,9 @@ name: CI - Angular Ecommerce
 
 on:
   push:
-    branches: [ master]
+    branches: [ master ]
   pull_request:
-    branches: [ master]
+    branches: [ master ]
 
 jobs:
   test-backend:
@@ -26,7 +26,6 @@ jobs:
       - name: Install deps (backend)
         run: npm ci
 
-      # se não tiver testes, você pode trocar por npm run lint ou remover esse passo
       - name: Run backend tests
         run: npm test || echo "sem testes configurados"
 
@@ -47,18 +46,14 @@ jobs:
           cache-dependency-path: client/package-lock.json
 
       - name: Install deps (frontend)
-        run: npm ci
+        run: npm install --legacy-peer-deps
 
-      # idem: se não tiver testes, usa lint ou só build para validar
-      - name: Run frontend tests
-        run: npm test || echo "sem testes configurados"
+      - name: Build frontend (CI)
+        run: npm run build -- --configuration=production
 
   build-and-push-images:
     runs-on: ubuntu-latest
-    needs:
-      - test-backend
-    # se quiser obrigar passar frontend também:
-    # needs: [ test-backend, test-frontend ]
+    needs: [ test-backend, test-frontend ]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
