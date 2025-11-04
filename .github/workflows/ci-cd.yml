@@ -5,6 +5,7 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+  workflow_dispatch:  # opcional: permite rodar manualmente pelo botão "Run workflow"
 
 jobs:
   test-backend:
@@ -58,11 +59,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Login to Docker Hub
+      - name: Login to Docker Registry (Docker Hub)
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -74,8 +75,8 @@ jobs:
           file: ./backend/Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/ecommerce-backend:dev
-            ${{ secrets.DOCKERHUB_USERNAME }}/ecommerce-backend:${{ github.sha }}
+            ${{ secrets.REGISTRY_USER }}/ecommerce-backend:dev
+            ${{ secrets.REGISTRY_USER }}/ecommerce-backend:${{ github.sha }}
 
       - name: Build and push frontend image
         uses: docker/build-push-action@v6
@@ -84,5 +85,22 @@ jobs:
           file: ./client/Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/ecommerce-frontend:dev
-            ${{ secrets.DOCKERHUB_USERNAME }}/ecommerce-frontend:${{ github.sha }}
+            ${{ secrets.REGISTRY_USER }}/ecommerce-frontend:dev
+            ${{ secrets.REGISTRY_USER }}/ecommerce-frontend:${{ github.sha }}
+
+  deploy-to-ec2:
+    runs-on: ubuntu-latest
+    needs: build-and-push-images
+    steps:
+      - name: Deploy on EC2 via SSH (kubectl rollout)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ubuntu/angular-ecommerce-app
+            git pull origin master
+            cd k8s
+            kubectl rollout restart deployment backend -n app-demo
+            kubectl rollout restart deployment frontend -n app-demo
