@@ -1,4 +1,14 @@
-<header class="header-container header-container--gradient">
+<header
+  class="header-container"
+  style="
+    background: #121212;
+    color: #f5f5f5;
+    border-bottom: 1px solid #333;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+  "
+>
   <div class="header-container__left">
     <button
       nz-button
@@ -7,23 +17,60 @@
       (click)="toggleMenu()"
       nzShape="circle"
       nzSize="large"
+      [ngStyle]="{ color: '#f5f5f5' }"
     >
       <i
         nz-icon
         nzType="menu"
-        [ngStyle]="{ 'font-size': '1.25rem', 'padding-top': '6px' }"
+        [ngStyle]="{ 'font-size': '1.25rem', 'padding-top': '6px', color: '#f5f5f5' }"
       ></i>
     </button>
   </div>
-  <div class="header-container__middle">
-    <h3 routerLink="/" class="header-logo">
+  <div class="header-container__middle" style="flex: 1; text-align: center;">
+    <h3
+      routerLink="/"
+      style="
+        margin: 0;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      "
+    >
       LOJA TELHAS
-      <span class="header-logo__subtitle">Conforto &amp; proteção para sua casa</span>
+      <!-- badge só pra testar CI/CD -->
+      <span
+        style="
+          font-size: 0.7rem;
+          padding: 0.1rem 0.35rem;
+          border-radius: 999px;
+          background: #00c853;
+          color: #02110a;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+        "
+      >
+        Dark v1
+      </span>
     </h3>
   </div>
-  <div class="header-container__right">
+  <div class="header-container__right" style="display: flex; align-items: center; gap: 0.5rem;">
     <ng-container>
-      <div class="cart-counter cart-counter--accent">
+      <div
+        class="cart-counter"
+        style="
+          min-width: 22px;
+          height: 22px;
+          border-radius: 999px;
+          background: #ffb300;
+          color: #121212;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.75rem;
+          font-weight: 600;
+        "
+      >
         {{ cartData.products.length }}
       </div>
       <button
@@ -37,26 +84,33 @@
         [nzDropdownMenu]="menu"
         [nzVisible]="dropdownVisible"
         (nzVisibleChange)="toggleDropdown()"
+        [ngStyle]="{ color: '#f5f5f5' }"
       >
         <i
           nz-icon
           nzType="shopping-cart"
-          [ngStyle]="{ fontSize: '24px', paddingTop: '3px' }"
+          [ngStyle]="{ fontSize: '24px', paddingTop: '3px', color: '#f5f5f5' }"
         ></i>
       </button>
       <nz-dropdown-menu #menu="nzDropdownMenu">
-        <div class="cart-dropdown">
-          <div class="cart-dropdown__header" *ngIf="cartData.products.length !== 0">
-            <span class="cart-dropdown__title">Seu carrinho</span>
-          </div>
-
+        <div
+          class="cart-dropdown"
+          style="
+            background: #1e1e1e;
+            color: #f5f5f5;
+            min-width: 260px;
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            padding: 0.75rem;
+          "
+        >
           <div
             class="cart-dropdown__empty"
             *ngIf="cartData.products.length === 0"
+            style="text-align: center; padding: 1rem 0; font-size: 0.9rem; color: #bbbbbb;"
           >
-            Seu carrinho está vazio.
+            Your cart is empty.
           </div>
-
           <div
             class="cart-dropdown__content"
             *ngIf="cartData.products.length !== 0"
@@ -67,38 +121,87 @@
                 *ngFor="let product of cartData.products; index as i"
                 [ngStyle]="{
                   'border-bottom':
-                    i !== cartData.products.length - 1 && '1px solid #ccc'
+                    i !== cartData.products.length - 1 && '1px solid #333'
                 }"
+                style="padding: 0.5rem 0;"
               >
-                <div class="product-item">
+                <div
+                  class="product-item"
+                  style="
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                  "
+                >
                   <div
                     class="product-item__remove"
                     (click)="removeProductFromCart(product.id)"
+                    style="
+                      cursor: pointer;
+                      color: #ff6b6b;
+                      font-weight: bold;
+                      padding: 0 0.25rem;
+                    "
                   >
                     X
                   </div>
-                  <div class="product-item__image">
-                    <img [src]="product.image" alt="" />
+                  <div
+                    class="product-item__image"
+                    style="width: 48px; height: 48px; flex-shrink: 0;"
+                  >
+                    <img
+                      [src]="product.image"
+                      alt=""
+                      style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;"
+                    />
                   </div>
-                  <div class="product-item__description">
-                    <div class="product-name">{{ product.title }}</div>
-                    <div class="product-amount">
+                  <div
+                    class="product-item__description"
+                    style="flex: 1; font-size: 0.85rem;"
+                  >
+                    <div
+                      class="product-name"
+                      style="font-weight: 500; margin-bottom: 0.25rem;"
+                    >
+                      {{ product.title }}
+                    </div>
+                    <div
+                      class="product-amount"
+                      style="color: #cccccc;"
+                    >
                       {{ product.quantity }} x
-                      <span>{{ product.price | currency: "BRL" }}</span>
+                      <span style="font-weight: 600;">
+                        {{ product.price | currency: "USD" }}
+                      </span>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="cart-info">
-              <div class="selected-amount">
-                {{ cartData.products.length }} item(s) selecionado(s)
+            <div
+              class="cart-info"
+              style="
+                display: flex;
+                justify-content: space-between;
+                margin-top: 0.75rem;
+                font-size: 0.85rem;
+              "
+            >
+              <div class="selected-amount" style="color: #bbbbbb;">
+                {{ cartData.products.length }} Item(s) selected
               </div>
-              <div class="total-price">
-                Total: {{ cartData.total | currency: "BRL" }}
+              <div class="total-price" style="font-weight: 600;">
+                Total: {{ cartData.total | currency: "USD" }}
               </div>
             </div>
-            <div class="cart-cta">
+            <div
+              class="cart-cta"
+              style="
+                display: flex;
+                gap: 0.5rem;
+                margin-top: 0.75rem;
+              "
+            >
               <button
                 nz-button
                 nzSize="large"
@@ -107,10 +210,13 @@
                 [ngStyle]="{
                   borderLeft: 'none',
                   borderRight: 'none',
-                  borderBottom: 'none'
+                  borderBottom: 'none',
+                  width: '50%',
+                  background: '#2c2c2c',
+                  color: '#f5f5f5'
                 }"
               >
-                Ver carrinho
+                View cart
               </button>
               <button
                 nz-button
@@ -121,10 +227,12 @@
                 [ngStyle]="{
                   borderLeft: 'none',
                   borderRight: 'none',
-                  borderBottom: 'none'
+                  borderBottom: 'none',
+                  width: '50%',
+                  background: '#00c853'
                 }"
               >
-                Finalizar compra
+                Checkout
               </button>
             </div>
           </div>
@@ -134,43 +242,66 @@
   </div>
 </header>
 
-<!-- <div class="nav-container" *ngIf="!isMobile">
-  <nav>
-    <ul>
-      <li routerLink="/">Home</li>
-      <li routerLink="/login">Login</li>
-      <li routerLink="/register">Register</li>
-      <li routerLink="/profile">Profile</li>
-      <li routerLink="/cart">Cart</li>
-      <li routerLink="/product/1">Product</li>
-      <li routerLink="/checkout">Checkout</li>
-      <li routerLink="/order-history">Order History</li>
-    </ul>
-  </nav>
-</div> -->
-
-<div [className]="isMenuOpen ? 'side-menu show' : 'side-menu'">
-  <i nz-icon nzType="close" nzTheme="outline" (click)="toggleMenu()"></i>
-  <div class="side-menu__content">
-    <h2 routerLink="/" (click)="toggleMenu()">Loja Telhas</h2>
+<div
+  [className]="isMenuOpen ? 'side-menu show' : 'side-menu'"
+  style="
+    background: #121212;
+    color: #f5f5f5;
+  "
+>
+  <i
+    nz-icon
+    nzType="close"
+    nzTheme="outline"
+    (click)="toggleMenu()"
+    [ngStyle]="{
+      color: '#f5f5f5',
+      fontSize: '20px',
+      position: 'absolute',
+      top: '12px',
+      right: '12px',
+      cursor: 'pointer'
+    }"
+  ></i>
+  <div
+    class="side-menu__content"
+    style="padding: 3rem 1.5rem 1.5rem; display: flex; flex-direction: column; gap: 1rem;"
+  >
+    <h2
+      routerLink="/"
+      (click)="toggleMenu()"
+      style="margin: 0; cursor: pointer;"
+    >
+      Eccom
+    </h2>
     <nav>
-      <ul>
-        <li routerLink="/" (click)="toggleMenu()">Início</li>
-        <li routerLink="/cart" (click)="toggleMenu()">Carrinho</li>
-        <li routerLink="/profile" (click)="toggleMenu()">Perfil</li>
-        <li routerLink="/order-history" (click)="toggleMenu()">
-          Histórico de pedidos
+      <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem;">
+        <li routerLink="/" (click)="toggleMenu()" style="cursor: pointer;">
+          Home
+        </li>
+        <li routerLink="/cart" (click)="toggleMenu()" style="cursor: pointer;">
+          Cart
+        </li>
+        <li routerLink="/profile" (click)="toggleMenu()" style="cursor: pointer;">
+          Profile
+        </li>
+        <li
+          routerLink="/order-history"
+          (click)="toggleMenu()"
+          style="cursor: pointer;"
+        >
+          Order History
         </li>
       </ul>
     </nav>
-    <div class="🍑">
+    <div class="🍑" style="display: flex; flex-direction: column; gap: 0.5rem;">
       <button
         nz-button
         routerLink="/login"
         (click)="toggleMenu()"
         *ngIf="!isLoggedIn"
       >
-        Entrar
+        Sign in
       </button>
       <button
         nz-button
@@ -178,10 +309,10 @@
         (click)="toggleMenu()"
         *ngIf="!isLoggedIn"
       >
-        Cadastrar
+        Sign up
       </button>
       <button nz-button (click)="logout() && toggleMenu()" *ngIf="isLoggedIn">
-        Sair
+        Sign out
       </button>
     </div>
   </div>
@@ -190,4 +321,5 @@
 <div
   [className]="isMenuOpen ? 'darken-background enable' : 'darken-background'"
   (click)="toggleMenu()"
+  style="background: rgba(0, 0, 0, 0.7);"
 ></div>
