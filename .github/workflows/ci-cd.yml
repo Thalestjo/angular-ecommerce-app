@@ -5,8 +5,7 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-  workflow_dispatch:  # opcional: permite rodar manualmente pelo botão "Run workflow"
-
+  workflow_dispatch: 
 jobs:
   test-backend:
     runs-on: ubuntu-latest

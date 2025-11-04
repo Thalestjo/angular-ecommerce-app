@@ -1,4 +1,4 @@
-<header class="header-container">
+<header class="header-container header-container--gradient">
   <div class="header-container__left">
     <button
       nz-button
@@ -16,11 +16,16 @@
     </button>
   </div>
   <div class="header-container__middle">
-    <h3 routerLink="/">LOJA TELHAS</h3>
+    <h3 routerLink="/" class="header-logo">
+      LOJA TELHAS
+      <span class="header-logo__subtitle">Conforto &amp; proteção para sua casa</span>
+    </h3>
   </div>
   <div class="header-container__right">
     <ng-container>
-      <div class="cart-counter">{{ cartData.products.length }}</div>
+      <div class="cart-counter cart-counter--accent">
+        {{ cartData.products.length }}
+      </div>
       <button
         nz-button
         nz-dropdown
@@ -41,12 +46,17 @@
       </button>
       <nz-dropdown-menu #menu="nzDropdownMenu">
         <div class="cart-dropdown">
+          <div class="cart-dropdown__header" *ngIf="cartData.products.length !== 0">
+            <span class="cart-dropdown__title">Seu carrinho</span>
+          </div>
+
           <div
             class="cart-dropdown__empty"
             *ngIf="cartData.products.length === 0"
           >
-            Your cart is empty.
+            Seu carrinho está vazio.
           </div>
+
           <div
             class="cart-dropdown__content"
             *ngIf="cartData.products.length !== 0"
@@ -74,7 +84,7 @@
                     <div class="product-name">{{ product.title }}</div>
                     <div class="product-amount">
                       {{ product.quantity }} x
-                      <span>{{ product.price | currency: "USD" }}</span>
+                      <span>{{ product.price | currency: "BRL" }}</span>
                     </div>
                   </div>
                 </div>
@@ -82,10 +92,10 @@
             </div>
             <div class="cart-info">
               <div class="selected-amount">
-                {{ cartData.products.length }} Item(s) selected
+                {{ cartData.products.length }} item(s) selecionado(s)
               </div>
               <div class="total-price">
-                Total: {{ cartData.total | currency: "USD" }}
+                Total: {{ cartData.total | currency: "BRL" }}
               </div>
             </div>
             <div class="cart-cta">
@@ -100,7 +110,7 @@
                   borderBottom: 'none'
                 }"
               >
-                View cart
+                Ver carrinho
               </button>
               <button
                 nz-button
@@ -114,7 +124,7 @@
                   borderBottom: 'none'
                 }"
               >
-                Checkout
+                Finalizar compra
               </button>
             </div>
           </div>
@@ -142,14 +152,14 @@
 <div [className]="isMenuOpen ? 'side-menu show' : 'side-menu'">
   <i nz-icon nzType="close" nzTheme="outline" (click)="toggleMenu()"></i>
   <div class="side-menu__content">
-    <h2 routerLink="/" (click)="toggleMenu()">Eccom</h2>
+    <h2 routerLink="/" (click)="toggleMenu()">Loja Telhas</h2>
     <nav>
       <ul>
-        <li routerLink="/" (click)="toggleMenu()">Home</li>
-        <li routerLink="/cart" (click)="toggleMenu()">Cart</li>
-        <li routerLink="/profile" (click)="toggleMenu()">Profile</li>
+        <li routerLink="/" (click)="toggleMenu()">Início</li>
+        <li routerLink="/cart" (click)="toggleMenu()">Carrinho</li>
+        <li routerLink="/profile" (click)="toggleMenu()">Perfil</li>
         <li routerLink="/order-history" (click)="toggleMenu()">
-          Order History
+          Histórico de pedidos
         </li>
       </ul>
     </nav>
@@ -160,7 +170,7 @@
         (click)="toggleMenu()"
         *ngIf="!isLoggedIn"
       >
-        Sign in
+        Entrar
       </button>
       <button
         nz-button
@@ -168,10 +178,10 @@
         (click)="toggleMenu()"
         *ngIf="!isLoggedIn"
       >
-        Sign up
+        Cadastrar
       </button>
       <button nz-button (click)="logout() && toggleMenu()" *ngIf="isLoggedIn">
-        Sign out
+        Sair
       </button>
     </div>
   </div>
